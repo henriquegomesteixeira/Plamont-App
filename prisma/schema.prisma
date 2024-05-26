@@ -1,0 +1,40 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ReferenceUser {
+  id        Int      @id @default(autoincrement())
+  cpf       String   @unique
+  name      String
+  matricula String
+  role      String
+  // sector    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[] @relation("ReferenceUserToUser")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  cpf             String   @unique
+  matricula       String
+  name            String
+  role            String
+  email           String   @unique
+  password        String
+  // sector    String
+  profile_picture String?
+  acess_level     Int      @default(0)
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  referenceUser ReferenceUser? @relation("ReferenceUserToUser", fields: [cpf], references: [cpf])
+}
