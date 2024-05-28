@@ -1,40 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Configurações do Projeto
 
-## Getting Started
+### 1. Configuração do Prettier
+Essa configuração adiciona um plugin específico do Tailwind CSS ao Prettier, que é uma ferramenta de formatação de código.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```json
+// Arquivo: .prettierrc
+{
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
 ```
+- **plugins:** Lista de plugins para o Prettier. O plugin prettier-plugin-tailwindcss ajuda a ordenar as classes do Tailwind CSS de maneira consistente.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configuração do Lint-Staged
+Lint-Staged é uma ferramenta que permite aplicar linters aos arquivos que estão sendo commitados (ou seja, somente aos arquivos que foram alterados e que estão prestes a ser commitados).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```json
+// Arquivo: .lintstagedrc.json
+{
+  "*.ts?(x)": ["eslint --fix", "prettier --write"]
+}
+```
+- **"*.ts?(x)":** Essa expressão regular se aplica a todos os arquivos com extensão ".ts" ou ".tsx."
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- **"eslint --fix":** Executa o ESLint e tenta corrigir automaticamente os problemas encontrados.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- **"prettier --write":** Formata os arquivos usando Prettier.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 3. Configuração do Husky para Mensagens de Commit
+Husky é uma ferramenta que permite criar hooks de Git, como pre-commit e commit-msg, que são acionados em eventos específicos no fluxo de trabalho do Git.
 
-## Learn More
+```sh
+# Arquivo: .husky/commit-msg
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-To learn more about Next.js, take a look at the following resources:
+.git/hooks/commit-msg $1
+```
+- **commit-msg:** Hook que verifica a mensagem de commit. Este script é um wrapper que chama o script "commit-msg" dentro do diretório ".git/hooks" com o argumento "$1", que é a mensagem de commit.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Hook de Pre-Commit
+Este script é executado antes de um commit ser criado. Ele usa o lint-staged para aplicar as verificações e correções configuradas somente aos arquivos que estão sendo commitados.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+# Arquivo: .husky/pre-commit
+npx lint-staged
+```
+- **npx lint-staged:** Executa o lint-staged para aplicar os comandos de linting e formatação definidos no ."lintstagedrc.json" aos arquivos que estão sendo commitados.
