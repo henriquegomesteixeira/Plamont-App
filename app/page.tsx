@@ -12,9 +12,7 @@ export default async function Home() {
     <div className="flex flex-col gap-2">
       <h1>Home Page</h1>
       <form action={logout}>
-        <button className="bg-black text-white p-2.5 rounded-md">
-          Logout
-        </button>
+        <button className="rounded-md bg-black p-2.5 text-white">Logout</button>
       </form>
     </div>
   );

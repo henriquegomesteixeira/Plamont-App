@@ -56,7 +56,7 @@ export const {
     }),
   ],
   pages: {
-    signIn: '/login', // Define a URL da sua página de login personalizada
-    signOut: '/', // Define a URL da sua página de logout personalizada
+    signIn: "/login", // Define a URL da sua página de login personalizada
+    signOut: "/", // Define a URL da sua página de logout personalizada
   },
 });
